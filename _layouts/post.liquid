@@ -1,0 +1,76 @@
+---
+layout: default
+---
+<!-- _layouts/post.html -->
+{%- assign year = page.date | date: '%Y' -%}
+{%- assign tags = page.tags | join: '' -%}
+{%- assign categories = page.categories | join: '' -%}
+
+{% if page._styles %}
+  <!-- Page/Post style -->
+  <style type="text/css">
+    {{ page._styles }}
+  </style>
+{% endif %}
+
+<div class="post">
+  <header class="post-header">
+    <div class="post-heading">
+      <h1 class="post-title">{{ page.title }}</h1>
+      <p class="post-meta">
+        {{ page.date | date: '%B %-d, %Y' }}
+        {%- if page.author -%}• {{ page.author }}{%- endif -%}
+        {%- if page.meta -%}• {{ page.meta }}{%- endif -%}
+      </p>
+    </div>
+    <p class="post-tags">
+      <a href="{{ year | prepend: '/blog/' | prepend: site.baseurl}}"><i class="fas fa-calendar fa-sm"></i> {{ year }}</a>
+      {%- if categories != '' %}
+        <span class="post-meta-separator">&middot;</span>
+        {% for category in page.categories -%}
+          <a href="{{ category | slugify | prepend: '/blog/category/' | prepend: site.baseurl}}"> <i class="fas fa-tag fa-sm"></i> {{ category }}</a>
+        {% endfor -%}
+      {% endif %}
+
+      {%- if tags != '' %}
+        <span class="post-meta-separator">&middot;</span>
+        {% for tag in page.tags -%}
+          <a href="{{ tag | slugify | prepend: '/blog/tag/' | prepend: site.baseurl}}"> <i class="fas fa-hashtag fa-sm"></i> {{ tag }}</a>
+        {% endfor -%}
+      {% endif %}
+    </p>
+  </header>
+
+  {% if page.toc and page.toc.sidebar %}
+    <div class="row">
+      {% if page.toc.sidebar == 'right' %}
+        <article class="post-content col-sm-9">{{ content }}</article>
+        <nav class="col-sm-3" id="toc" data-toggle="toc"></nav>
+      {% else %}
+        <nav class="col-sm-3" id="toc" data-toggle="toc"></nav>
+        <article class="post-content col-sm-9">{{ content }}</article>
+      {% endif %}
+    </div>
+  {% else %}
+    <article class="post-content">
+      {{ content }}
+    </article>
+  {% endif %}
+
+  {% if page.citation %}
+    {% include citation.liquid %}
+  {% endif %}
+
+  {%- if site.related_blog_posts.enabled -%}
+    {%- if page.related_posts == null or page.related_posts -%}
+      {% include related_posts.liquid %}
+    {%- endif %}
+  {%- endif %}
+
+  {%- if site.disqus_shortname and page.disqus_comments -%}
+    {% include disqus.liquid %}
+  {%- endif %}
+  {%- if site.giscus.repo and page.giscus_comments -%}
+    {% include giscus.liquid %}
+  {%- endif -%}
+</div>

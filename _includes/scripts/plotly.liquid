@@ -1,0 +1,19 @@
+{% if page.plotly or page.content contains 'language-plotly' %}
+  <script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre > code.language-plotly').forEach((elem) => {
+        const source = elem.textContent.trim();
+        const config = JSON.parse(source);
+        const chart = document.createElement('div');
+        chart.className = 'plotly-chart';
+        elem.parentElement.parentElement.after(chart);
+        elem.parentElement.parentElement.classList.add('unloaded');
+        Plotly.newPlot(chart, config.data || [], config.layout || {}, {
+          responsive: true,
+          displaylogo: false,
+        });
+      });
+    });
+  </script>
+{% endif %}

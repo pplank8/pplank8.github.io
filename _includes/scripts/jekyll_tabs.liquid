@@ -1,0 +1,15 @@
+{% if page.tabs %}
+  <script src="{{ '/assets/js/tabs.min.js' | relative_url | bust_file_cache }}"></script>
+  <script>
+    jekyllTabs.init({
+      activateTabFromUrl: true,
+      syncTabsWithSameLabels: true,
+      addCopyToClipboardButtons: true,
+      copyToClipboardSettings: {
+        buttonHTML: '<button>Copy</button>',
+        showToastMessageOnCopy: true,
+        toastMessage: 'Code copied to clipboard',
+      },
+    });
+  </script>
+{% endif %}
